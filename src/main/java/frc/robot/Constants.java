@@ -31,7 +31,7 @@ public final class Constants {
     public static final double kRampRate = .5;
 
     //Deadband
-    public static final double kDriveDeadband = .02;
+    public static final double kDriveDeadband = .03;
   }
 
   public static class LauncherConstants {

@@ -4,11 +4,7 @@
 
 package frc.robot.subsystems;
 
-import static frc.robot.Constants.DrivetrainConstants.kRampRate;
-import static frc.robot.Constants.DrivetrainConstants.kLeftFrontID;
-import static frc.robot.Constants.DrivetrainConstants.kLeftRearID;
-import static frc.robot.Constants.DrivetrainConstants.kRightFrontID;
-import static frc.robot.Constants.DrivetrainConstants.kRightRearID;
+import static frc.robot.Constants.DrivetrainConstants.*;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -62,7 +58,7 @@ public class CANDrivetrain extends SubsystemBase {
     // Put the front motors into the differential drive object. This will control all 4 motors with
     // the rears set to follow the fronts
     m_drivetrain = new DifferentialDrive(leftFront, rightFront);
-    //m_drivetrain.setSafetyEnabled
+    m_drivetrain.setDeadband(kDriveDeadband);
   }
 
   /*Method to control the drivetrain using arcade drive. Arcade drive takes a speed in the X (forward/back) direction

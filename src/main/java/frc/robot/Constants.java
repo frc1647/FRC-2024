@@ -29,6 +29,9 @@ public final class Constants {
 
     // Current limit for drivetrain motors
     public static final double kRampRate = .5;
+
+    //Deadband
+    public static final double kDriveDeadband = .02;
   }
 
   public static class LauncherConstants {

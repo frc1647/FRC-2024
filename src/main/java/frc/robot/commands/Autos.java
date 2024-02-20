@@ -21,16 +21,21 @@ public final class Autos {
      */
     return new RunCommand(() -> drivetrain.tankDrive(.3, .3))
         .withTimeout(1)
-        .andThen(new RunCommand(() -> drivetrain.tankDrive(0, 0)));
+        .andThen(new RunCommand(() -> drivetrain.tankDrive(0, 1)));
     
   }
-  //public static Command TurnAndShoot(CANDrivetrain drivetrain, CANLauncher m_launcher){
-  //  return new RunCommand(() -> drivetrain.tankDrive(0, 1))
-  //      .withTimeout(1)
-  //      .andThen(new RunCommand(() -> drivetrain.tankDrive(0, 0)));
-  //  m_launcher.LaunchNote(m_launcher); //launch ring
-  //  m_launcher.initialize(); //turn on flywheel
-  //}
+  /*public static Command Shoot(CANDrivetrain drivetrain, CANLauncher m_launcher){//Drives robot and scores
+    Command.sequence{
+      return new RunCommand(() -> drivetrain.tankDrive(0, 1))
+          .withTimeout(1)
+          .andThen(new RunCommand(() -> drivetrain.tankDrive(0, 0)));
+      m_launcher.LaunchNote(m_launcher); //launch ring
+      m_launcher.initialize(); //turn on flywheel
+    }
+    public static Command aprilTageCommand(CANDrivetrain m_drivetrain){
+
+    }
+  }*/
   
   
   private Autos() {

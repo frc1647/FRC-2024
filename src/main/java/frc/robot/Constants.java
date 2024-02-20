@@ -31,7 +31,7 @@ public final class Constants {
     public static final double kRampRate = .5;
 
     //Deadband
-    public static final double kDriveDeadband = .03;
+    public static final double kDriveDeadband = .05;
   }
 
   public static class LauncherConstants {
@@ -52,10 +52,13 @@ public final class Constants {
 
     public static final double kLauncherDelay = 1;
   }
+  public static class IntakeConstants {
+    public static final double kIntake = 3;
+  }
 
   public static class ClimberConstants {
-    public static final int kLeftClimberID = 4; //temporary
-    public static final int kRightClimberID = 1; //temporary
+    public static final int kLeftClimberID = 14; //temporary
+    public static final int kRightClimberID = 15; //temporary
     
     public static final double kLeftDownSpeed = 1; //temporary
     public static final double kRightDownSpeed = 1; //temporary

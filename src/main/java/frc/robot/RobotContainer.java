@@ -14,7 +14,7 @@ import frc.robot.commands.LaunchNote;
 import frc.robot.commands.PrepareLaunch;
 import frc.robot.subsystems.CANDrivetrain;
 import frc.robot.subsystems.CANLauncher;
-//import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Climber;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -56,7 +56,12 @@ public class RobotContainer {
             m_drivetrain));
             
     
-    //m_climber.setDefaultCommand(new RunCommand(() -> m_climber.stickControl(-m_operatorController.getLeftY(), -m_operatorController.getRightY()), m_climber));
+    /*m_climber.setDefaultCommand(
+        new RunCommand(
+            () -> 
+                m_climber.stickControl(
+                    -m_operatorController.getLeftY(), -m_operatorController.getRightY()), 
+            m_climber));*/
 
     /*Create an inline sequence to run when the operator presses and holds the A (green) button. Run the PrepareLaunch
      * command for 1 seconds and then run the LaunchNote command */

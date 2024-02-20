@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import static frc.robot.Constants.DrivetrainConstants.*;
 
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -24,6 +25,7 @@ public class CANDrivetrain extends SubsystemBase {
   /*Class member variables. These variables represent things the class needs to keep track of and use between
   different method calls. */
   DifferentialDrive m_drivetrain;
+  private RelativeEncoder m_rightEncoder, m_leftEncoder;
 
   /*Constructor. This method is called when an instance of the class is created. This should generally be used to set up
    * member variables and perform any configuration or set up necessary on hardware.
@@ -40,6 +42,7 @@ public class CANDrivetrain extends SubsystemBase {
     leftRear.setOpenLoopRampRate(kRampRate);
     rightFront.setOpenLoopRampRate(kRampRate);
     rightRear.setOpenLoopRampRate(kRampRate);
+    
 
     // coast mode
     leftFront.setIdleMode(IdleMode.kCoast);
@@ -68,7 +71,10 @@ public class CANDrivetrain extends SubsystemBase {
   //}
 
   public void tankDrive(double leftSpeed, double rightSpeed) {
-    m_drivetrain.tankDrive(leftSpeed, rightSpeed);
+    m_drivetrain.tankDrive(.533 * Math.pow(leftSpeed,3) + .467 * leftSpeed, .533 * Math.pow(rightSpeed,3) + .467 * rightSpeed);
+    //m_drivetrain.tankDrive(-0.8 * Math.pow(leftSpeed,3) + 1.8 * leftSpeed, -0.8* Math.pow(rightSpeed,3) + 1.8 * rightSpeed);
+    //m_drivetrain.tankDrive(leftSpeed, rightSpeed);
+
   }
 
   @Override

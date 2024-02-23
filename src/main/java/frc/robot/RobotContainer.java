@@ -26,7 +26,7 @@ public class RobotContainer {
   // The robot's subsystems are defined here.
   private final CANDrivetrain m_drivetrain = new CANDrivetrain();
   private final CANLauncher m_launcher = new CANLauncher();
-  //private final Climber m_climber = new Climber();
+  private final Climber m_climber = new Climber();
 
   /*The gamepad provided in the KOP shows up like an XBox controller if the mode switch is set to X mode using the
    * switch on the top.*/
@@ -56,12 +56,12 @@ public class RobotContainer {
             m_drivetrain));
             
     
-    /*m_climber.setDefaultCommand(
+    m_climber.setDefaultCommand(
         new RunCommand(
             () -> 
                 m_climber.stickControl(
                     -m_operatorController.getLeftY(), -m_operatorController.getRightY()), 
-            m_climber));*/
+            m_climber));
 
     /*Create an inline sequence to run when the operator presses and holds the A (green) button. Run the PrepareLaunch
      * command for 1 seconds and then run the LaunchNote command */

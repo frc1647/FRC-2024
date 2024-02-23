@@ -73,7 +73,7 @@ public class CANDrivetrain extends SubsystemBase {
   public void tankDrive(double leftSpeed, double rightSpeed) {
     m_drivetrain.tankDrive(.533 * Math.pow(leftSpeed,3) + .467 * leftSpeed, .533 * Math.pow(rightSpeed,3) + .467 * rightSpeed);
     //m_drivetrain.tankDrive(-0.8 * Math.pow(leftSpeed,3) + 1.8 * leftSpeed, -0.8* Math.pow(rightSpeed,3) + 1.8 * rightSpeed);
-    //m_drivetrain.tankDrive(leftSpeed, rightSpeed);
+    //m_drivetrain.tankDrive(.5 * leftSpeed, .5 * rightSpeed);
 
   }
 

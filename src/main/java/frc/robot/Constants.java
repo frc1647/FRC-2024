@@ -57,8 +57,8 @@ public final class Constants {
   }
 
   public static class ClimberConstants {
-    public static final int kLeftClimberID = 14; //temporary
-    public static final int kRightClimberID = 15; //temporary
+    public static final int kLeftClimberID = 16;
+    public static final int kRightClimberID = 15;
     
     public static final double kLeftDownSpeed = 1; //temporary
     public static final double kRightDownSpeed = 1; //temporary

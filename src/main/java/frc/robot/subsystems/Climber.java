@@ -6,14 +6,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import static frc.robot.Constants.ClimberConstants.kLeftClimberID;
-import static frc.robot.Constants.ClimberConstants.kRightClimberID;
-
-import static frc.robot.Constants.ClimberConstants.kLeftDownSpeed;
-import static frc.robot.Constants.ClimberConstants.kLeftUpSpeed;
-import static frc.robot.Constants.ClimberConstants.kRightDownSpeed;
-import static frc.robot.Constants.ClimberConstants.kRightUpSpeed;
-
+import static frc.robot.Constants.ClimberConstants.*;
 
 public class Climber extends SubsystemBase {
     TalonFX left;
@@ -83,8 +76,17 @@ public class Climber extends SubsystemBase {
 
       //variable speed control
       public void stickControl(double leftSpeed, double rightSpeed) {
-        left.set(leftSpeed);
-        right.set(rightSpeed);
+        if (Math.abs(leftSpeed) > kDeadzone) {
+          left.set(leftSpeed);
+        } else {
+          left.set(0);
+        }
+        
+        if (Math.abs(rightSpeed) > kDeadzone) {
+          right.set(rightSpeed);
+        } else {
+          right.set(0);
+        }
       }
 
 

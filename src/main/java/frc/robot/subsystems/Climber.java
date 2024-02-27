@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 //import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -15,6 +16,9 @@ public class Climber extends SubsystemBase {
     public Climber() {
         left = new TalonFX(kLeftClimberID);
         right = new TalonFX(kRightClimberID);
+
+        left.setNeutralMode(NeutralModeValue.Brake);
+        right.setNeutralMode(NeutralModeValue.Brake);
     }
 
     // butten press functions (not used rn)

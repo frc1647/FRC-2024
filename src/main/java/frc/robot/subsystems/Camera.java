@@ -44,6 +44,7 @@ public class Camera extends SubsystemBase {
         }
       }
 
+
     
       SmartDashboard.putNumber("yaw", yaw);
       SmartDashboard.putNumber("pitch", pitch);

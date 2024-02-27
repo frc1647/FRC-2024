@@ -77,6 +77,10 @@ public class CANDrivetrain extends SubsystemBase {
 
   }
 
+  public void rawTankDrive(double leftSpeed, double rightSpeed) {
+    m_drivetrain.tankDrive(leftSpeed, rightSpeed);
+  }
+
   @Override
   public void periodic() {
     /*This method will be called once per scheduler run. It can be used for running tasks we know we want to update each

@@ -51,38 +51,36 @@ public class Camera extends SubsystemBase {
     }
   }
 
-
-  /*public boolean getHasTarget(){
+  public boolean getHasTarget(){
     return result.hasTargets();
   }
 
-  	public double getRange(){
-      if (result.hasTargets()) {
-        return kApriltagHeightDifferenceInches / Math.tan(Math.toRadians(kCameraAngle + pitch));
-      }else{
-        return 0.0;
-      }
-  	}*/
-
-    public double getYawAngle(){ //range: (_,_)
-      if (result.hasTargets()) {
-        return yaw;
-      }else{
-        return 0.0;
-      }
-  	}
-  	
-  	
-  	public double latency() {
-      camera.setDriverMode(true);
-  		camera.setPipelineIndex(2);
-  		return result.getLatencyMillis() / 1000.0;
-  	}
-
-    public void smartdashboard(){
-      SmartDashboard.putNumber("yaw", yaw);
-      SmartDashboard.putNumber("pitch", pitch);
-      SmartDashboard.putNumber("area", area);
-      SmartDashboard.putNumber("latency", latency());
+  public double getYawAngle(){ //range: (_,_)
+    if (result.hasTargets()) {
+      return yaw;
+    }else{
+      return 0.0;
     }
   }
+
+  /*public double getRange(){
+    if (result.hasTargets()) {
+      return kApriltagHeightDifferenceInches / Math.tan(Math.toRadians(kCameraAngle + pitch));
+    }else{
+      return 0.0;
+    }
+  }
+  
+  public double latency() {
+    camera.setDriverMode(true);
+    camera.setPipelineIndex(2);
+    return result.getLatencyMillis() / 1000.0;
+  }
+
+  public void smartdashboard(){
+    SmartDashboard.putNumber("yaw", yaw);
+    SmartDashboard.putNumber("pitch", pitch);
+    SmartDashboard.putNumber("area", area);
+    SmartDashboard.putNumber("latency", latency());
+  }*/
+}

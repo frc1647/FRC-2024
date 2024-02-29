@@ -19,21 +19,22 @@ public class Camera extends SubsystemBase {
   double yaw = 0;
   double pitch = 0;
   double area = 0;
+  int tagID;
 
   public Camera(){
     camera = new PhotonCamera("FrontCam");
     //camera = new PhotonCamera("photonvision");
-
-    camera.setPipelineIndex(1);
+    camera.setPipelineIndex(0);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     result = camera.getLatestResult();
-    int tagID;
+
+    SmartDashboard.putBoolean("Target?", result.hasTargets());
     if(result.hasTargets()){
-      for (int i = 0; i < result.getTargets().size()-1; i++) {
+      for (int i = 0; i < result.getTargets().size(); i++) {
         tagID = result.getTargets().get(i).getFiducialId();
         if (tagID == 4 || tagID == 7) {
           target = result.getTargets().get(i);
@@ -42,6 +43,7 @@ public class Camera extends SubsystemBase {
           area = target.getArea();
         }
       }
+
 
     
       SmartDashboard.putNumber("yaw", yaw);

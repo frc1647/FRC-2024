@@ -1,7 +1,7 @@
 package frc.robot.subsystems;
 
-//import static frc.robot.Constants.CameraConstants.kApriltagHeightDifferenceInches;
-//import static frc.robot.Constants.CameraConstants.kCameraAngle;
+import static frc.robot.Constants.CameraConstants.kApriltagHeightDifferenceInches;
+import static frc.robot.Constants.CameraConstants.kCameraAngle;
 
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
@@ -21,7 +21,7 @@ public class Camera extends SubsystemBase {
   double area = 0;
 
   public Camera(){
-    camera = new PhotonCamera("Microsoft_LifeCam_HD-3000");
+    camera = new PhotonCamera("FrontCam");
     //camera = new PhotonCamera("photonvision");
 
     camera.setPipelineIndex(1);
@@ -63,7 +63,7 @@ public class Camera extends SubsystemBase {
     }
   }
 
-  /*public double getRange(){
+  public double getRange(){
     if (result.hasTargets()) {
       return kApriltagHeightDifferenceInches / Math.tan(Math.toRadians(kCameraAngle + pitch));
     }else{
@@ -71,7 +71,7 @@ public class Camera extends SubsystemBase {
     }
   }
   
-  public double latency() {
+  /*public double latency() {
     camera.setDriverMode(true);
     camera.setPipelineIndex(2);
     return result.getLatencyMillis() / 1000.0;

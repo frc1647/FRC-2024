@@ -71,7 +71,7 @@ public final class Constants {
 
     // height of apriltag - height of camera
     public static final double kApriltagHeightDifferenceInches = 57 - 6;
-    public static final double kCameraAngle = 34;
+    public static final double kCameraAngle = 30;
   }
 
   public static class AutoConstants {

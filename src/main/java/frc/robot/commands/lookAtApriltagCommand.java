@@ -9,6 +9,9 @@ public class lookAtApriltagCommand extends Command{
     Camera camera;
     CANDrivetrain drivetrain;
 
+    double yaw;
+    double range;
+
     public lookAtApriltagCommand(Camera m_camera, CANDrivetrain m_drivetrain) {
         m_camera = camera;
         m_drivetrain = drivetrain;

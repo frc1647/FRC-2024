@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import static frc.robot.Constants.DrivetrainConstants.*;
 
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxRelativeEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -25,7 +26,8 @@ public class CANDrivetrain extends SubsystemBase {
   /*Class member variables. These variables represent things the class needs to keep track of and use between
   different method calls. */
   DifferentialDrive m_drivetrain;
-  private RelativeEncoder m_rightEncoder, m_leftEncoder;
+  RelativeEncoder m_rightEncoder, m_leftEncoder;
+  private double rightPosition, leftPosition;
 
   /*Constructor. This method is called when an instance of the class is created. This should generally be used to set up
    * member variables and perform any configuration or set up necessary on hardware.
@@ -42,7 +44,6 @@ public class CANDrivetrain extends SubsystemBase {
     leftRear.setOpenLoopRampRate(kRampRate);
     rightFront.setOpenLoopRampRate(kRampRate);
     rightRear.setOpenLoopRampRate(kRampRate);
-    
 
     // coast mode
     leftFront.setIdleMode(IdleMode.kCoast);
@@ -58,17 +59,21 @@ public class CANDrivetrain extends SubsystemBase {
     leftFront.setInverted(false);
     rightFront.setInverted(true);
 
+    //encoders
+    m_rightEncoder = rightFront.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42);
+    m_leftEncoder = leftFront.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42);
+
     // Put the front motors into the differential drive object. This will control all 4 motors with
     // the rears set to follow the fronts
     m_drivetrain = new DifferentialDrive(leftFront, rightFront);
     m_drivetrain.setDeadband(kDriveDeadband);
   }
 
-  /*Method to control the drivetrain using arcade drive. Arcade drive takes a speed in the X (forward/back) direction
-   * and a rotation about the Z (turning the robot about it's center) and uses these to control the drivetrain motors */
-  //public void arcadeDrive(double speed, double rotation) {
-    //m_drivetrain.arcadeDrive(speed, rotation);
-  //}
+  @Override
+  public void periodic() {
+    leftPosition = m_leftEncoder.getPosition();
+    rightPosition = m_rightEncoder.getPosition();
+  }
 
   public void tankDrive(double leftSpeed, double rightSpeed) {
     m_drivetrain.tankDrive(.533 * Math.pow(leftSpeed,3) + .467 * leftSpeed, .533 * Math.pow(rightSpeed,3) + .467 * rightSpeed);
@@ -81,9 +86,11 @@ public class CANDrivetrain extends SubsystemBase {
     m_drivetrain.tankDrive(leftSpeed, rightSpeed);
   }
 
-  @Override
-  public void periodic() {
-    /*This method will be called once per scheduler run. It can be used for running tasks we know we want to update each
-     * loop such as processing sensor data. Our drivetrain is simple so we don't have anything to put here */
+  public double getRightPosition() {
+      return rightPosition;
+  }
+
+  public double getLeftPosition() {
+      return leftPosition;
   }
 }

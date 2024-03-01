@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.CANDrivetrain;
 import frc.robot.subsystems.CANLauncher;
 import frc.robot.commands.LaunchNote;
@@ -24,18 +25,13 @@ public final class Autos {
         .andThen(new RunCommand(() -> drivetrain.tankDrive(0, 1)));
     
   }
-  /*public static Command Shoot(CANDrivetrain drivetrain, CANLauncher m_launcher){//Drives robot and scores
-    Command.sequence{
-      return new RunCommand(() -> drivetrain.tankDrive(0, 1))
-          .withTimeout(1)
-          .andThen(new RunCommand(() -> drivetrain.tankDrive(0, 0)));
-      m_launcher.LaunchNote(m_launcher); //launch ring
-      m_launcher.initialize(); //turn on flywheel
-    }
-    public static Command aprilTageCommand(CANDrivetrain m_drivetrain){
 
-    }
-  }*/
+  public static Command BlindCenter(CANDrivetrain drivetrain, CANLauncher m_launcher){
+    return new PrepareLaunch(m_launcher).withTimeout(2)
+      .andThen(new LaunchNote(m_launcher).withTimeout(.5)
+      .andThen(m_launcher.getStopCommand()));
+
+  }
   
   
   private Autos() {

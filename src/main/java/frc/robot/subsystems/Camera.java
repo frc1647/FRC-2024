@@ -20,6 +20,8 @@ public class Camera extends SubsystemBase {
   double pitch = 0;
   double area = 0;
   int tagID;
+  Pose3d robotPose;
+  AprilTagFieldLayout aprilTagFieldLayout;
 
   public Camera(){
     camera = new PhotonCamera("FrontCam");
@@ -42,6 +44,7 @@ public class Camera extends SubsystemBase {
           pitch = target.getPitch();
           area = target.getArea();
         }
+    
       }
 
 
@@ -72,7 +75,16 @@ public class Camera extends SubsystemBase {
       return 0.0;
     }
   }
-  
+  public ____ APField(){ //IDK what goes here
+    // The field from AprilTagFields will be different depending on the game.
+    aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
+    return aprilTagFieldLayout;
+  }
+  public ____ robotPose(){ //IDK what goes here
+    // Calculate robot's field relative pose
+    robotPose = PhotonUtils.estimateFieldToRobotAprilTag(target.getBestCameraToTarget(), aprilTagFieldLayout.getTagPose(target.getFiducialId()), kcameraToRobot);
+    return robotPose;
+  }
   /*public double latency() {
     camera.setDriverMode(true);
     camera.setPipelineIndex(2);

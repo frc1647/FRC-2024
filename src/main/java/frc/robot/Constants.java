@@ -68,10 +68,10 @@ public final class Constants {
     public static final double kRightUpSpeed = 1.00; //temporary
   }
   public static class CameraConstants {
-
     // height of apriltag - height of camera
     public static final double kApriltagHeightDifferenceInches = 57 - 6;
     public static final double kCameraAngle = 30;
+    public static final double kcameraToRobot = 0;
   }
 
   public static class AutoConstants {

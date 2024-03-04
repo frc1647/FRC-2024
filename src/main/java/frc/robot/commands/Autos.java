@@ -30,7 +30,6 @@ public final class Autos {
     return new PrepareLaunch(m_launcher).withTimeout(2)
       .andThen(new LaunchNote(m_launcher).withTimeout(.5)
       .andThen(m_launcher.getStopCommand()));
-
   }
   
   

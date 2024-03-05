@@ -6,23 +6,30 @@ package frc.robot.subsystems;
 
 import static frc.robot.Constants.DrivetrainConstants.*;
 
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxRelativeEncoder;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import java.util.ArrayList;
 
 //NavX
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+//motors
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxRelativeEncoder;
 
 //Odometry
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /* This class declares the subsystem for the robot drivetrain if controllers are connected via CAN. Make sure to go to
  * RobotContainer and uncomment the line declaring this subsystem and comment the line for PWMDrivetrain.
@@ -37,7 +44,11 @@ public class CANDrivetrain extends SubsystemBase {
   DifferentialDrive m_drivetrain;
   RelativeEncoder m_rightEncoder, m_leftEncoder;
   double rightPosition, leftPosition;
+
+  AHRS navX;
+
   DifferentialDriveOdometry tankOdometry;
+  Pose2d m_pose;
 
   /*Constructor. This method is called when an instance of the class is created. This should generally be used to set up
    * member variables and perform any configuration or set up necessary on hardware.
@@ -78,14 +89,22 @@ public class CANDrivetrain extends SubsystemBase {
     m_drivetrain = new DifferentialDrive(leftFront, rightFront);
     m_drivetrain.setDeadband(kDriveDeadband);
 
-    //Odometry
+    //NavX
+    navX = new AHRS(SPI.Port.kMXP);
 
+    //Odometry
+    tankOdometry = new DifferentialDriveOdometry(navX.getRotation2d(), leftPosition, rightPosition);
   }
 
   @Override
   public void periodic() {
-    leftPosition = m_leftEncoder.getPosition();
-    rightPosition = m_rightEncoder.getPosition();
+    leftPosition = m_leftEncoder.getPosition(); //change this to return meters
+    rightPosition = m_rightEncoder.getPosition(); //  /\
+
+    //m_pose = tankOdometry.update(navX.getRotation2d(), leftPosition, leftPosition);
+
+    SmartDashboard.putNumber("left Encoder", leftPosition);
+    SmartDashboard.putNumber("right Encoder", rightPosition);
   }
 
   public void tankDrive(double leftSpeed, double rightSpeed) {

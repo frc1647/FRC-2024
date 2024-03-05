@@ -12,8 +12,17 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+//NavX
+import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+//Odometry
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 
 /* This class declares the subsystem for the robot drivetrain if controllers are connected via CAN. Make sure to go to
  * RobotContainer and uncomment the line declaring this subsystem and comment the line for PWMDrivetrain.
@@ -27,7 +36,8 @@ public class CANDrivetrain extends SubsystemBase {
   different method calls. */
   DifferentialDrive m_drivetrain;
   RelativeEncoder m_rightEncoder, m_leftEncoder;
-  private double rightPosition, leftPosition;
+  double rightPosition, leftPosition;
+  DifferentialDriveOdometry tankOdometry;
 
   /*Constructor. This method is called when an instance of the class is created. This should generally be used to set up
    * member variables and perform any configuration or set up necessary on hardware.
@@ -67,6 +77,9 @@ public class CANDrivetrain extends SubsystemBase {
     // the rears set to follow the fronts
     m_drivetrain = new DifferentialDrive(leftFront, rightFront);
     m_drivetrain.setDeadband(kDriveDeadband);
+
+    //Odometry
+
   }
 
   @Override
@@ -79,7 +92,6 @@ public class CANDrivetrain extends SubsystemBase {
     m_drivetrain.tankDrive(.533 * Math.pow(leftSpeed,3) + .467 * leftSpeed, .533 * Math.pow(rightSpeed,3) + .467 * rightSpeed);
     //m_drivetrain.tankDrive(-0.8 * Math.pow(leftSpeed,3) + 1.8 * leftSpeed, -0.8* Math.pow(rightSpeed,3) + 1.8 * rightSpeed);
     //m_drivetrain.tankDrive(.5 * leftSpeed, .5 * rightSpeed);
-
   }
 
   public void rawTankDrive(double leftSpeed, double rightSpeed) {
@@ -92,5 +104,9 @@ public class CANDrivetrain extends SubsystemBase {
 
   public double getLeftPosition() {
       return leftPosition;
+  }
+
+  public Pose2d getPose(){
+    return tankOdometry.getPoseMeters();
   }
 }

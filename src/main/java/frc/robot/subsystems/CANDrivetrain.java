@@ -98,8 +98,8 @@ public class CANDrivetrain extends SubsystemBase {
 
   @Override
   public void periodic() {
-    leftPosition = m_leftEncoder.getPosition(); //change this to return meters
-    rightPosition = m_rightEncoder.getPosition(); //  /\
+    leftPosition = m_leftEncoder.getPosition()/22.0; //change this to return meters
+    rightPosition = m_rightEncoder.getPosition()/22.0; //  /\
 
     //m_pose = tankOdometry.update(navX.getRotation2d(), leftPosition, leftPosition);
 

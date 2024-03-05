@@ -15,7 +15,7 @@ class ExampleTrajectory {
 
         public void generateTrajectory() {
 
-        // 2018 cross scale auto waypoints.
+        // 15.5 inches back
         var sideStart = new Pose2d(0, 0,
             Rotation2d.fromDegrees(-180));
         var crossScale = new Pose2d(.5, 0,

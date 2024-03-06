@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.proto.Trajectory;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;

@@ -9,7 +9,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 
-class ExampleTrajectory {
+public class ExampleTrajectory {
 
     Trajectory trajectory;
 
@@ -35,7 +35,7 @@ class ExampleTrajectory {
             config);
     }
 
-    public Trajectory gTrajectory(){
+    public Trajectory getTrajectory(){
         return trajectory;
     }
   }

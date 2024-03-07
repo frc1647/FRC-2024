@@ -6,10 +6,8 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.CANDrivetrain;
 import frc.robot.subsystems.CANLauncher;
-import frc.robot.commands.LaunchNote;
 
 public final class Autos {
   /** Example static factory for an autonomous command. */
@@ -32,6 +30,9 @@ public final class Autos {
       .andThen(m_launcher.getStopCommand()));
   }
   
+  public static Command BlindCenter2(CANDrivetrain drivetrain, CANLauncher m_launcher){
+    return new CenterAutoCommand(drivetrain, m_launcher);
+  }
   
   private Autos() {
     throw new UnsupportedOperationException("This is a utility class!");

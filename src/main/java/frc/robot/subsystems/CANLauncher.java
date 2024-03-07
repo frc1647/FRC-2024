@@ -41,12 +41,7 @@ public class CANLauncher extends SubsystemBase {
   public Command getStopCommand() {
     // The startEnd helper method takes a method to call when the command is initialized and one to
     // call when it ends
-    return this.startEnd(
-        // When the command is initialized, set the wheels to the intake speed values
-        () -> {
-          stop();
-        },
-        // When the command stops, stop the wheels
+    return runOnce(
         () -> {
           stop();
         });
@@ -55,7 +50,7 @@ public class CANLauncher extends SubsystemBase {
   public Command getIntakeCommand() {
     // The startEnd helper method takes a method to call when the command is initialized and one to
     // call when it ends
-    return this.startEnd(
+    return startEnd(
         // When the command is initialized, set the wheels to the intake speed values
         () -> {
           setFeedWheel(kIntakeFeederSpeed);

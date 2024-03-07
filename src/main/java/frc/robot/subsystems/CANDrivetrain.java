@@ -6,12 +6,8 @@ package frc.robot.subsystems;
 
 import static frc.robot.Constants.DrivetrainConstants.*;
 
-import java.util.ArrayList;
-
 //NavX
 import com.kauailabs.navx.frc.AHRS;
-import edu.wpi.first.wpilibj.SPI;
-
 //motors
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -19,22 +15,16 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxRelativeEncoder;
 
-//Odometry
-import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
-// Trajectories
-import frc.robot.Trajectories.ExampleTrajectory;
 
 /* This class declares the subsystem for the robot drivetrain if controllers are connected via CAN. Make sure to go to
  * RobotContainer and uncomment the line declaring this subsystem and comment the line for PWMDrivetrain.
@@ -48,8 +38,9 @@ public class CANDrivetrain extends SubsystemBase {
   different method calls. */
   CANSparkMax leftFront, rightFront;
   DifferentialDrive m_drivetrain;
+
   RelativeEncoder m_rightEncoder, m_leftEncoder;
-  double rightPositionMeters, leftPositionMeters;
+  double rightPositionMeters, leftPositionMeters, leftVelocityMPS, rightVelocityMPS;
 
   AHRS navX;
 
@@ -59,6 +50,9 @@ public class CANDrivetrain extends SubsystemBase {
   Trajectory exampleTrajectory;
 
   RamseteController controller;
+
+  DifferentialDriveKinematics tankKinematics;
+  DifferentialDriveWheelSpeeds wheelSpeeds;
 
   /*Constructor. This method is called when an instance of the class is created. This should generally be used to set up
    * member variables and perform any configuration or set up necessary on hardware.
@@ -91,8 +85,12 @@ public class CANDrivetrain extends SubsystemBase {
     rightFront.setInverted(true);
 
     //encoders
-    m_rightEncoder = rightFront.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42);
     m_leftEncoder = leftFront.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42);
+    m_rightEncoder = rightFront.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42);
+    m_leftEncoder.setPositionConversionFactor(kPositionConversionFactor);
+    m_rightEncoder.setPositionConversionFactor(kPositionConversionFactor);
+    m_leftEncoder.setVelocityConversionFactor(kVelocityConversionFactor);
+    m_rightEncoder.setVelocityConversionFactor(kVelocityConversionFactor);
 
     // Put the front motors into the differential drive object. This will control all 4 motors with
     // the rears set to follow the fronts
@@ -102,21 +100,30 @@ public class CANDrivetrain extends SubsystemBase {
     //NavX
     navX = new AHRS(SPI.Port.kMXP);
 
-    //Odometry
     tankOdometry = new DifferentialDriveOdometry(navX.getRotation2d(), leftPositionMeters, rightPositionMeters);
-    exampleTrajectory = new ExampleTrajectory().getTrajectory();
-    controller = new RamseteController();
+
+    tankKinematics = new DifferentialDriveKinematics(kDrivetrainWidthMeters);
+
+    wheelSpeeds = new DifferentialDriveWheelSpeeds();
   }
 
   @Override
   public void periodic() {
-    leftPositionMeters = m_leftEncoder.getPosition()/22.0; // move to constants
-    rightPositionMeters = m_rightEncoder.getPosition()/22.0;
+    leftPositionMeters = m_leftEncoder.getPosition();
+    rightPositionMeters = m_rightEncoder.getPosition();
 
-    //m_pose = tankOdometry.update(navX.getRotation2d(), leftPositionMeters, leftPositionMeters);
+    leftVelocityMPS = m_leftEncoder.getVelocity();
+    rightVelocityMPS = m_rightEncoder.getVelocity();
+
+    wheelSpeeds.leftMetersPerSecond = leftVelocityMPS;
+    wheelSpeeds.rightMetersPerSecond = rightVelocityMPS;
+
+    m_pose = tankOdometry.update(navX.getRotation2d(), leftPositionMeters, leftPositionMeters);
 
     SmartDashboard.putNumber("left Encoder", leftPositionMeters);
     SmartDashboard.putNumber("right Encoder", rightPositionMeters);
+    SmartDashboard.putNumber("left Velo MPS", leftVelocityMPS);
+    SmartDashboard.putNumber("right Velo MPS", rightVelocityMPS);
   }
 
   public void tankDrive(double leftSpeed, double rightSpeed) {
@@ -146,5 +153,20 @@ public class CANDrivetrain extends SubsystemBase {
     return tankOdometry.getPoseMeters();
   }
 
-  
+  public void zeroEncoders(){
+    m_leftEncoder.setPosition(0);
+    m_rightEncoder.setPosition(0);
+  }
+
+  public void resetGyro(){
+    navX.reset();
+  }
+
+  public DifferentialDriveKinematics getKinematics(){
+    return tankKinematics;
+  }
+
+  public DifferentialDriveWheelSpeeds getWheelSpeeds(){
+    return wheelSpeeds;
+  }
 }

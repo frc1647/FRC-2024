@@ -89,6 +89,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return Autos.BlindCenter(m_drivetrain, m_launcher);
+    return Autos.BlindCenter2(m_drivetrain, m_launcher);
   }
 }

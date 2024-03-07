@@ -27,11 +27,14 @@ public final class Constants {
     public static final int kRightFrontID = 3;
     public static final int kRightRearID = 4;
 
-    // Current limit for drivetrain motors
     public static final double kRampRate = .5;
 
-    //Deadband
     public static final double kDriveDeadband = .05;
+
+    public static final double kPositionConversionFactor = 0.04545;
+    public static final double kVelocityConversionFactor = 0.04545; // may change or be unnessary
+
+    public static final double kDrivetrainWidthMeters = .5; //temporary
   }
 
   public static class LauncherConstants {
@@ -52,6 +55,7 @@ public final class Constants {
 
     public static final double kLauncherDelay = 1;
   }
+
   public static class IntakeConstants {
     public static final double kIntake = 3;
   }
@@ -75,6 +79,18 @@ public final class Constants {
   }
 
   public static class AutoConstants {
+
+    public static class RamseteConstants {
+      public static final double kRamseteOutputMPS = 1.0; //might work
+
+      // feedforward values (all temporary)
+      public static final double ksVolts = 0;
+      public static final double kvVoltSecondsPerMeter = 0;
+      public static final double kaVoltSecondsSquaredPerMeter = 0;
+
+      // PID values (temporary)
+      public static final double kPDriveVel = 0.05;
+    }
 
     public static class lookAtApriltagConstants {
     // height of apriltag - height of camera

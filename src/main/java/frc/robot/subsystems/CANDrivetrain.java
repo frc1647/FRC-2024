@@ -21,6 +21,8 @@ import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -139,6 +141,11 @@ public class CANDrivetrain extends SubsystemBase {
   public void voltTankDrive(double leftVolts, double rightVolts){
     leftFront.setVoltage(leftVolts);
     rightFront.setVoltage(rightVolts);
+  }
+
+  public void voltTankDriveMeasure(Measure<Voltage> volts){
+    leftFront.setVoltage(volts.magnitude());
+    rightFront.setVoltage(volts.magnitude());
   }
 
   public double getRightPositionMeters() {

@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.LaunchNote;
@@ -15,6 +16,8 @@ import frc.robot.commands.PrepareLaunch;
 import frc.robot.subsystems.CANDrivetrain;
 import frc.robot.subsystems.CANLauncher;
 import frc.robot.subsystems.Climber;
+//import frc.robot.subsystems.SystemIdLog;
+import frc.robot.subsystems.intake;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -27,6 +30,8 @@ public class RobotContainer {
   private final CANDrivetrain m_drivetrain = new CANDrivetrain();
   private final CANLauncher m_launcher = new CANLauncher();
   private final Climber m_climber = new Climber();
+  private final intake m_intake = new intake();
+  //private final SystemIdLog m_systemIdLog = new SystemIdLog();   //may break
 
   /*The gamepad provided in the KOP shows up like an XBox controller if the mode switch is set to X mode using the
    * switch on the top.*/
@@ -70,6 +75,8 @@ public class RobotContainer {
         .whileTrue(
             new PrepareLaunch(m_launcher));
 
+    m_operatorController.rightTrigger().whileTrue(new intake());
+
     // Set up a binding to run the intake command while the operator is pressing and holding the
     // left Bumper
     m_operatorController.leftBumper().whileTrue(m_launcher.getIntakeCommand());
@@ -82,6 +89,11 @@ public class RobotContainer {
     m_operatorController.a().onFalse(m_launcher.getStopCommand());
   }
 
+  //SysId
+  //SysIdRoutine routine = new SysIdRoutine(new SysIdRoutine.Config(), new SysIdRoutine.Mechanism(m_drivetrain::voltTankDriveMeasure, m_systemIdLog, m_drivetrain));
+
+
+
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
@@ -89,6 +101,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return Autos.BlindCenter2(m_drivetrain, m_launcher);
+    return Autos.BlindSideAuto(m_drivetrain, m_launcher);
   }
 }

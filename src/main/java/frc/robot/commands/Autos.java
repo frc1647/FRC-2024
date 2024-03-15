@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.CANDrivetrain;
 import frc.robot.subsystems.CANLauncher;
 
@@ -20,18 +21,30 @@ public final class Autos {
      */
     return new RunCommand(() -> drivetrain.tankDrive(.3, .3))
         .withTimeout(1)
-        .andThen(new RunCommand(() -> drivetrain.tankDrive(0, 1)));
+        .andThen(new RunCommand(() -> drivetrain.tankDrive(0, 0)));
     
   }
 
-  public static Command BlindCenter(CANDrivetrain drivetrain, CANLauncher m_launcher){
-    return new PrepareLaunch(m_launcher).withTimeout(2)
+  public static Command BlindCenterAuto(CANDrivetrain drivetrain, CANLauncher m_launcher){
+    return new SequentialCommandGroup(
+      new DriveStraight(drivetrain, -.32),
+      new PrepareLaunch(m_launcher).withTimeout(2),
+      new LaunchNote(m_launcher).withTimeout(.5),
+      new DriveStraight(drivetrain, -.4)
+    );
+    
+    /*DriveStraight(drivetrain, -.32).andThen(new PrepareLaunch(m_launcher).withTimeout(2)
       .andThen(new LaunchNote(m_launcher).withTimeout(.5)
-      .andThen(m_launcher.getStopCommand()));
+      .andThen(m_launcher.getStopCommand().andThen(new DriveStraight(drivetrain, -.2)))));*/
   }
   
-  public static Command BlindCenter2(CANDrivetrain drivetrain, CANLauncher m_launcher){
-    return new CenterAutoCommand(drivetrain, m_launcher);
+  public static Command BlindSideAuto(CANDrivetrain drivetrain, CANLauncher m_launcher){
+    return new SequentialCommandGroup(
+      //new DriveStraight(drivetrain, -.5),
+      new PrepareLaunch(m_launcher).withTimeout(2),
+      new LaunchNote(m_launcher).withTimeout(.5),
+      new DriveStraight(drivetrain, -1)
+    );
   }
   
   private Autos() {

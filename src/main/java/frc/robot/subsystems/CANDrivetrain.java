@@ -38,10 +38,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class CANDrivetrain extends SubsystemBase {
   /*Class member variables. These variables represent things the class needs to keep track of and use between
   different method calls. */
-  CANSparkMax leftFront, rightFront;
+  public CANSparkMax leftFront, rightFront;
+  CANSparkMax leftRear, rightRear;
   DifferentialDrive m_drivetrain;
 
-  RelativeEncoder m_rightEncoder, m_leftEncoder;
+  public RelativeEncoder m_rightEncoder, m_leftEncoder;
   double rightPositionMeters, leftPositionMeters, leftVelocityMPS, rightVelocityMPS;
 
   AHRS navX;
@@ -60,10 +61,10 @@ public class CANDrivetrain extends SubsystemBase {
    * member variables and perform any configuration or set up necessary on hardware.
    */
   public CANDrivetrain() {
-    this.leftFront = new CANSparkMax(kLeftFrontID, MotorType.kBrushless);
-    CANSparkMax leftRear = new CANSparkMax(kLeftRearID, MotorType.kBrushless);
-    this.rightFront = new CANSparkMax(kRightFrontID, MotorType.kBrushless);
-    CANSparkMax rightRear = new CANSparkMax(kRightRearID, MotorType.kBrushless);
+    leftFront = new CANSparkMax(kLeftFrontID, MotorType.kBrushless);
+    leftRear = new CANSparkMax(kLeftRearID, MotorType.kBrushless);
+    rightFront = new CANSparkMax(kRightFrontID, MotorType.kBrushless);
+    rightRear = new CANSparkMax(kRightRearID, MotorType.kBrushless);
 
     /*Sets current limits for the drivetrain motors. This helps reduce the likelihood of wheel spin, reduces motor heating
      *at stall (Drivetrain pushing against something) and helps maintain battery voltage under heavy demand */
@@ -126,7 +127,7 @@ public class CANDrivetrain extends SubsystemBase {
     SmartDashboard.putNumber("right Encoder", rightPositionMeters);
     SmartDashboard.putNumber("left Velo MPS", leftVelocityMPS);
     SmartDashboard.putNumber("right Velo MPS", rightVelocityMPS);
-  }
+    }
 
   public void tankDrive(double leftSpeed, double rightSpeed) {
     m_drivetrain.tankDrive(.533 * Math.pow(leftSpeed,3) + .467 * leftSpeed, .533 * Math.pow(rightSpeed,3) + .467 * rightSpeed);
@@ -154,6 +155,14 @@ public class CANDrivetrain extends SubsystemBase {
 
   public double getLeftPositionMeters() {
       return leftPositionMeters;
+  }
+
+  public double getLeftVelocityMPS(){
+    return leftVelocityMPS;
+  }
+
+  public double getRightVelocityMPS(){
+    return rightVelocityMPS;
   }
 
   public Pose2d getPose(){

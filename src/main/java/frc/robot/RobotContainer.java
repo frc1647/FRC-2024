@@ -4,6 +4,10 @@
 
 package frc.robot;
 
+import edu.wpi.first.units.Distance;
+import edu.wpi.first.units.MutableMeasure;
+import edu.wpi.first.units.Velocity;
+import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
@@ -16,8 +20,19 @@ import frc.robot.commands.PrepareLaunch;
 import frc.robot.subsystems.CANDrivetrain;
 import frc.robot.subsystems.CANLauncher;
 import frc.robot.subsystems.Climber;
+import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog.State;
+
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.Volts;
+
+import com.ctre.phoenix.led.ColorFlowAnimation.Direction;
+
+import static edu.wpi.first.units.MutableMeasure.mutable;
+
 //import frc.robot.subsystems.SystemIdLog;
-import frc.robot.subsystems.intake;
+import frc.robot.subsystems.CANIntake;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -30,8 +45,15 @@ public class RobotContainer {
   private final CANDrivetrain m_drivetrain = new CANDrivetrain();
   private final CANLauncher m_launcher = new CANLauncher();
   private final Climber m_climber = new Climber();
-  private final intake m_intake = new intake();
+  private final CANIntake m_intake = new CANIntake();
   //private final SystemIdLog m_systemIdLog = new SystemIdLog();   //may break
+
+  // Mutable holder for unit-safe voltage values, persisted to avoid reallocation.
+  private final MutableMeasure<Voltage> m_appliedVoltage = mutable(Volts.of(0));
+  // Mutable holder for unit-safe linear distance values, persisted to avoid reallocation.
+  private final MutableMeasure<Distance> m_distance = mutable(Meters.of(0));
+  // Mutable holder for unit-safe linear velocity values, persisted to avoid reallocation.
+  private final MutableMeasure<Velocity<Distance>> m_velocity = mutable(MetersPerSecond.of(0));
 
   /*The gamepad provided in the KOP shows up like an XBox controller if the mode switch is set to X mode using the
    * switch on the top.*/
@@ -75,7 +97,7 @@ public class RobotContainer {
         .whileTrue(
             new PrepareLaunch(m_launcher));
 
-    m_operatorController.rightTrigger().whileTrue(new intake());
+    m_operatorController.leftTrigger().whileTrue(m_intake.getRollersInCommand());
 
     // Set up a binding to run the intake command while the operator is pressing and holding the
     // left Bumper
@@ -89,10 +111,32 @@ public class RobotContainer {
     m_operatorController.a().onFalse(m_launcher.getStopCommand());
   }
 
-  //SysId
-  //SysIdRoutine routine = new SysIdRoutine(new SysIdRoutine.Config(), new SysIdRoutine.Mechanism(m_drivetrain::voltTankDriveMeasure, m_systemIdLog, m_drivetrain));
+  //SysId for drivetrain
+  SysIdRoutine routine = new SysIdRoutine(
+    new SysIdRoutine.Config(3, 8), 
+    new SysIdRoutine.Mechanism(
+      m_drivetrain::voltTankDriveMeasure, 
+      log -> {
+        log.motor("leftFront")
+          .voltage(m_appliedVoltage.mut_replace(m_drivetrain.leftFront.get()*RobotController.getBatteryVoltage(), Volts))
+          .linearPosition(m_distance.mut_replace(m_drivetrain.getLeftPositionMeters(), Meters))
+          .linearVelocity(m_velocity.mut_replace(m_drivetrain.getLeftVelocityMPS(), MetersPerSecond)); //probably need to add things to here (.voltage, .position, .velocity, .acceleration)
 
+        log.motor("rightFront")
+          .voltage(m_appliedVoltage.mut_replace(m_drivetrain.rightFront.get()*RobotController.getBatteryVoltage(), Volts))
+          .linearPosition(m_distance.mut_replace(m_drivetrain.getRightPositionMeters(), Meters))
+          .linearVelocity(m_velocity.mut_replace(m_drivetrain.getRightVelocityMPS(), MetersPerSecond)); //probably need to add things to here (.voltage, .position, .velocity, .acceleration)
 
+  
+
+      }, 
+      m_drivetrain
+    )
+  );
+
+  public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+    return routine.quasistatic(direction);
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -101,6 +145,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return Autos.BlindSideAuto(m_drivetrain, m_launcher);
+    //return Autos.BlindSideAuto(m_drivetrain, m_launcher);
+    return sysIdQuasistatic(SysIdRoutine.Direction.kForward);
   }
 }

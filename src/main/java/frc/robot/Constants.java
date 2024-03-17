@@ -57,7 +57,10 @@ public final class Constants {
   }
 
   public static class IntakeConstants {
-    public static final double kIntake = 3;
+    public static final double kIntakeSpeed = 0.3;
+    public static final int kArmID = 7; //spark max not configured
+    public static final int kRollerID = 8; //Talon SPX not configured
+    public static final double kRollerIntakeVolts = 10;
   }
 
   public static class ClimberConstants {
@@ -97,5 +100,8 @@ public final class Constants {
       public static final double kP = .03;
       //public static final double kI = 34;
     }
+  }
+  public static class sysIdLogConstants{
+    public static final boolean kForward = true;
   }
 }

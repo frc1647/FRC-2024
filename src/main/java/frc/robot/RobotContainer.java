@@ -10,6 +10,7 @@ import edu.wpi.first.units.Velocity;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -113,22 +114,19 @@ public class RobotContainer {
 
   //SysId for drivetrain
   SysIdRoutine routine = new SysIdRoutine(
-    new SysIdRoutine.Config(3, 8), 
+    new SysIdRoutine.Config(), 
     new SysIdRoutine.Mechanism(
       m_drivetrain::voltTankDriveMeasure, 
       log -> {
         log.motor("leftFront")
           .voltage(m_appliedVoltage.mut_replace(m_drivetrain.leftFront.get()*RobotController.getBatteryVoltage(), Volts))
           .linearPosition(m_distance.mut_replace(m_drivetrain.getLeftPositionMeters(), Meters))
-          .linearVelocity(m_velocity.mut_replace(m_drivetrain.getLeftVelocityMPS(), MetersPerSecond)); //probably need to add things to here (.voltage, .position, .velocity, .acceleration)
+          .linearVelocity(m_velocity.mut_replace(m_drivetrain.getLeftVelocityMPS(), MetersPerSecond));
 
         log.motor("rightFront")
           .voltage(m_appliedVoltage.mut_replace(m_drivetrain.rightFront.get()*RobotController.getBatteryVoltage(), Volts))
           .linearPosition(m_distance.mut_replace(m_drivetrain.getRightPositionMeters(), Meters))
-          .linearVelocity(m_velocity.mut_replace(m_drivetrain.getRightVelocityMPS(), MetersPerSecond)); //probably need to add things to here (.voltage, .position, .velocity, .acceleration)
-
-  
-
+          .linearVelocity(m_velocity.mut_replace(m_drivetrain.getRightVelocityMPS(), MetersPerSecond));
       }, 
       m_drivetrain
     )
@@ -146,6 +144,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     //return Autos.BlindSideAuto(m_drivetrain, m_launcher);
-    return sysIdQuasistatic(SysIdRoutine.Direction.kForward);
+    //return sysIdQuasistatic(SysIdRoutine.Direction.kForward);
+    return new SequentialCommandGroup(sysIdQuasistatic(SysIdRoutine.Direction.kForward), sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
   }
 }

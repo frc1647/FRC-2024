@@ -11,6 +11,7 @@ import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -84,12 +85,18 @@ public class RobotContainer {
             m_drivetrain));
             
     
-    m_climber.setDefaultCommand(
+    /*m_climber.setDefaultCommand(
         new RunCommand(
             () -> 
                 m_climber.stickControl(
                     -m_operatorController.getLeftY(), -m_operatorController.getRightY()), 
-            m_climber));
+            m_climber));*/
+
+    m_intake.setDefaultCommand(
+      new RunCommand(
+        () -> m_intake.stickControl(5* m_operatorController.getRightY(), m_operatorController.getLeftY() * 10),  //m_operatorController.getRightY() 
+      m_intake)
+    );
 
     /*Create an inline sequence to run when the operator presses and holds the A (green) button. Run the PrepareLaunch
      * command for 1 seconds and then run the LaunchNote command */
@@ -135,7 +142,15 @@ public class RobotContainer {
   public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
     return routine.quasistatic(direction);
   }
+  
+  public Command sysIdDymaniCommand(SysIdRoutine.Direction direction) {
+    return routine.dynamic(direction);
+  }
 
+  public CANDrivetrain getCanDrivetrain(){  //not good practice
+    return m_drivetrain;
+  }
+  
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
@@ -145,6 +160,13 @@ public class RobotContainer {
     // An example command will be run in autonomous
     //return Autos.BlindSideAuto(m_drivetrain, m_launcher);
     //return sysIdQuasistatic(SysIdRoutine.Direction.kForward);
-    return new SequentialCommandGroup(sysIdQuasistatic(SysIdRoutine.Direction.kForward), sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+    return new SequentialCommandGroup(
+      sysIdQuasistatic(SysIdRoutine.Direction.kReverse), 
+      new WaitCommand(2), 
+      sysIdQuasistatic(SysIdRoutine.Direction.kForward), 
+      new WaitCommand(2), 
+      sysIdDymaniCommand(SysIdRoutine.Direction.kReverse), 
+      new WaitCommand(2), 
+      sysIdDymaniCommand(SysIdRoutine.Direction.kForward));
   }
 }

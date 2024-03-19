@@ -32,7 +32,9 @@ public final class Constants {
     public static final double kDriveDeadband = .05;
 
     public static final double kPositionConversionFactor = 0.04545;
-    public static final double kVelocityConversionFactor = 0.04545; // may change or be unnessary
+    public static final double kVelocityConversionFactor = 0.00061599855;//(1.0/12.75) * 2.0 * Math.PI * .075 / 60.0;
+
+    ; // may change or be unnessary
 
     public static final double kDrivetrainWidthMeters = .5; //temporary
   }
@@ -58,8 +60,8 @@ public final class Constants {
 
   public static class IntakeConstants {
     public static final double kIntakeSpeed = 0.3;
-    public static final int kArmID = 7; //spark max not configured
-    public static final int kRollerID = 8; //Talon SPX not configured
+    public static final int kArmID = 13; //Falcon 500 (Talon FX)
+    public static final int kRollerID = 12; //Talon SPX
     public static final double kRollerIntakeVolts = 10;
   }
 

@@ -185,4 +185,18 @@ public class CANDrivetrain extends SubsystemBase {
   public DifferentialDriveWheelSpeeds getWheelSpeeds(){
     return wheelSpeeds;
   }
+
+  public void setCoastMode(){
+    leftFront.setIdleMode(IdleMode.kCoast);
+    leftRear.setIdleMode(IdleMode.kCoast);
+    rightFront.setIdleMode(IdleMode.kCoast);
+    rightRear.setIdleMode(IdleMode.kCoast);
+  }
+
+  public void setBrakeMode(){
+    leftFront.setIdleMode(IdleMode.kBrake);
+    leftRear.setIdleMode(IdleMode.kBrake);
+    rightFront.setIdleMode(IdleMode.kBrake);
+    rightRear.setIdleMode(IdleMode.kBrake);
+  }
 }

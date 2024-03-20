@@ -23,6 +23,7 @@ import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Voltage;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -43,7 +44,7 @@ public class CANDrivetrain extends SubsystemBase {
   DifferentialDrive m_drivetrain;
 
   public RelativeEncoder m_rightEncoder, m_leftEncoder;
-  double rightPositionMeters, leftPositionMeters, leftVelocityMPS, rightVelocityMPS;
+  double rightPositionMeters, leftPositionMeters, leftVelocityMPS, rightVelocityMPS, batteryVolts;
 
   AHRS navX;
 
@@ -123,6 +124,8 @@ public class CANDrivetrain extends SubsystemBase {
 
     m_pose = tankOdometry.update(navX.getRotation2d(), leftPositionMeters, leftPositionMeters);
 
+    batteryVolts = RobotController.getBatteryVoltage();   //only needed for SysID Testing
+
     SmartDashboard.putNumber("left Encoder", leftPositionMeters);
     SmartDashboard.putNumber("right Encoder", rightPositionMeters);
     SmartDashboard.putNumber("left Velo MPS", leftVelocityMPS);
@@ -144,9 +147,17 @@ public class CANDrivetrain extends SubsystemBase {
     rightFront.setVoltage(rightVolts);
   }
 
-  public void voltTankDriveMeasure(Measure<Voltage> volts){
-    leftFront.setVoltage(volts.magnitude());
-    rightFront.setVoltage(volts.magnitude());
+  public void voltsTankDriveMeasure(Measure<Voltage> volts){       // only used for Sys Id tests
+    leftFront.set(volts.magnitude() / RobotController.getBatteryVoltage());
+    rightFront.set(volts.magnitude() / RobotController.getBatteryVoltage());
+  }
+
+  public double getLeftVolts(){
+    return leftFront.get() * batteryVolts;
+  }
+
+  public double getRightVolts(){
+    return rightFront.get() * batteryVolts;
   }
 
   public double getRightPositionMeters() {

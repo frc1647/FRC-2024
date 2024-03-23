@@ -88,10 +88,9 @@ public final class Constants {
     public static class RamseteConstants {
       public static final double kRamseteOutputMPS = 1.0; //might work
 
-      // feedforward values (all temporary)
-      public static final double ksVolts = 0;
-      public static final double kvVoltSecondsPerMeter = 0;
-      public static final double kaVoltSecondsSquaredPerMeter = 0;
+      public static final double ksVolts = 0.2244;
+      public static final double kvVoltSecondsPerMeter = 3.4247;
+      public static final double kaVoltSecondsSquaredPerMeter = 0.62693;
 
       // PID values (temporary)
       public static final double kPDriveVel = 0.05;

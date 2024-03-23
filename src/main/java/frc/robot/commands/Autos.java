@@ -46,7 +46,19 @@ public final class Autos {
       new DriveStraight(drivetrain, -1)
     );
   }
+
+  public static Command SMRTCenterAuto(CANDrivetrain drivetrain, CANLauncher launcher){
+    return new CenterAutoCommand(drivetrain, launcher);
+  }
   
+  public static Command LeftSideRedAuto(CANDrivetrain drivetrain, CANLauncher launcher){
+    return new LeftSideRedCommand(drivetrain, launcher);
+  }
+
+  public static Command LeftSideTestingAuto(CANDrivetrain drivetrain, CANLauncher launcher){
+    return new LeftSideTestingCommand(drivetrain, launcher);
+  }
+
   private Autos() {
     throw new UnsupportedOperationException("This is a utility class!");
   }

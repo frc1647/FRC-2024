@@ -4,6 +4,7 @@ import com.revrobotics.RelativeEncoder;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import static frc.robot.Constants.IntakeConstants.*;
 
@@ -28,6 +29,7 @@ public class CANIntake extends SubsystemBase{
         //throughBoreEncoder = new Encoder(0, 1, false, Encoder.EncodingType.k2X);
         throughBoreEncoder = new DutyCycleEncoder(0);
 
+        armMotor.setNeutralMode(NeutralModeValue.Brake);
     }
 
     @Override
@@ -37,7 +39,7 @@ public class CANIntake extends SubsystemBase{
     }
     
     public void stickControl(double arm, double rollers){
-        armVolts(arm);
+        armSpeed(arm);
         rollerVolts(rollers);
     }
 
@@ -45,7 +47,7 @@ public class CANIntake extends SubsystemBase{
         return startEnd(
         // When the command is initialized, set the motor to the intake speed values
         () -> {
-            armVolts(kIntakeSpeed);
+            armSpeed(kIntakeSpeed);
         },
         // When the command stops, stop the motor
         () -> {
@@ -65,8 +67,8 @@ public class CANIntake extends SubsystemBase{
         });
     }
 
-    public void armVolts(double volts){
-        armMotor.setVoltage(volts);
+    public void armSpeed(double speed){
+        armMotor.set(speed);
     }
 
     public void stopArm(){

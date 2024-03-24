@@ -6,6 +6,8 @@ package frc.robot.subsystems;
 
 import static frc.robot.Constants.DrivetrainConstants.*;
 
+import java.util.zip.ZipError;
+
 //NavX
 import com.kauailabs.navx.frc.AHRS;
 //motors
@@ -27,6 +29,7 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /* This class declares the subsystem for the robot drivetrain if controllers are connected via CAN. Make sure to go to
@@ -129,6 +132,8 @@ public class CANDrivetrain extends SubsystemBase {
     SmartDashboard.putNumber("right Encoder", rightPositionMeters);
     SmartDashboard.putNumber("left Velo MPS", leftVelocityMPS);
     SmartDashboard.putNumber("right Velo MPS", rightVelocityMPS);
+    SmartDashboard.putNumber("angle", m_pose.getRotation().getDegrees());
+    
     }
 
   public void tankDrive(double leftSpeed, double rightSpeed) {
@@ -188,6 +193,15 @@ public class CANDrivetrain extends SubsystemBase {
     navX.reset();
   }
 
+  public Command getZeroEverythingCommand(){
+        return runOnce(
+        // When the command is initialized, set the motor to the intake speed values
+        () -> {
+            resetGyro();
+            zeroEncoders();
+        });
+    }
+
   public DifferentialDriveKinematics getKinematics(){
     return tankKinematics;
   }
@@ -209,4 +223,6 @@ public class CANDrivetrain extends SubsystemBase {
     rightFront.setIdleMode(IdleMode.kBrake);
     rightRear.setIdleMode(IdleMode.kBrake);
   }
+
+
 }

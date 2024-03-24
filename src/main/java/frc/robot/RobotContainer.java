@@ -113,6 +113,8 @@ public class RobotContainer {
         .whileTrue(new LaunchNote(m_launcher));
 
     m_operatorController.a().onFalse(m_launcher.getStopCommand());
+
+    m_operatorController.x().onTrue(m_drivetrain.getZeroEverythingCommand());
   }
 
 
@@ -164,7 +166,9 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return Autos.LeftSideTestingAuto(m_drivetrain, m_launcher);
+    return Autos.LeftSideRedAuto(m_drivetrain, m_launcher);
+    //return Autos.RightSideBlueAuto(m_drivetrain, m_launcher);
+
     //return sysIdQuasistatic(SysIdRoutine.Direction.kForward);
     
     

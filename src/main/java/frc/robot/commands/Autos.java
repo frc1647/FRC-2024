@@ -55,6 +55,10 @@ public final class Autos {
     return new LeftSideRedCommand(drivetrain, launcher);
   }
 
+  public static Command RightSideBlueAuto(CANDrivetrain drivetrain, CANLauncher launcher){
+    return new RightSideBlueCommand(drivetrain, launcher);
+  }
+
   public static Command LeftSideTestingAuto(CANDrivetrain drivetrain, CANLauncher launcher){
     return new LeftSideTestingCommand(drivetrain, launcher);
   }

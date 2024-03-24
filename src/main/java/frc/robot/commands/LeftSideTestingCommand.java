@@ -36,10 +36,11 @@ public class LeftSideTestingCommand extends SequentialCommandGroup{
 
         //trajectory 1
         Pose2d startingPoint = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
-        Pose2d ShootPoint = new Pose2d(SmartDashboard.getNumber("X Teasting Value", -0.09), SmartDashboard.getNumber("Y Teasting Value", .03), Rotation2d.fromDegrees(SmartDashboard.getNumber("Degrees Teasting Value", -5)));
+        //Pose2d //ShootPoint = new Pose2d(SmartDashboard.getNumber("X Teasting Value", -0.09), SmartDashboard.getNumber("Y Teasting Value", .03), Rotation2d.fromDegrees(SmartDashboard.getNumber("Degrees Teasting Value", -5)));
+        Pose2d ShootPoint = new Pose2d(-0.01, 0, Rotation2d.fromDegrees(3.13));
 
         var interiorWaypoints1 = new ArrayList<Translation2d>();
-        interiorWaypoints1.add(new Translation2d(SmartDashboard.getNumber("X WP Teasting Value", -0.045), SmartDashboard.getNumber("Y WP Teasting Value", 0.015)));
+        interiorWaypoints1.add(new Translation2d(0.004,0));
 
         trajectory1 = TrajectoryGenerator.generateTrajectory(startingPoint, interiorWaypoints1, ShootPoint, config);
 
